@@ -2,14 +2,18 @@
   "name": "backend-vidtube",
   "version": "1.0.0",
   "description": "a backend project and a comb of youtube and twitter",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "backend",
     "vidTube"
   ],
   "author": "koushikeya",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
 }
