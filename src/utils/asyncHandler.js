@@ -3,7 +3,7 @@
 // through Promises
 
 const asyncHandler = (reqHandler) =>{
-    (res, rej, next) => Promise.resolve(reqHandler(res, rej, next)).catch((err)=>{next(err)})
+    (res, rej, next) => {Promise.resolve(reqHandler(res, rej, next)).catch((err)=>{next(err)})}
 }
 
 
