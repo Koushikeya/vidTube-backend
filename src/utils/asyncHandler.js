@@ -1,16 +1,16 @@
-// async tasks can be handled through 2 ways 
+// async tasks can be handled through 2 ways
 
 // through Promises
 
-const asyncHandler = (reqHandler) =>{
-    (res, rej, next) => {Promise.resolve(reqHandler(res, rej, next)).catch((err)=>{next(err)})}
-}
+const asyncHandler = (reqHandler) => {
+  return  (req, res, next) => {
+    Promise.resolve(reqHandler(req, res, next)).catch((err) => {
+      next(err);
+    });
+  };
+};
 
-
-
-
-
-
+export { asyncHandler };
 
 /* const asyncHandler = (fn) => async (req,res,next)=>{
         try {
@@ -23,6 +23,3 @@ const asyncHandler = (reqHandler) =>{
         }
     }
  */
-
-
-export  { asyncHandler }
