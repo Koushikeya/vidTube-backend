@@ -13,21 +13,35 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // 2.1 Did the user fill the required fields
   if (
-    [fullName, username, email, password].some((field) => field?.trim === "")
+    [fullName, username, email, password].some((field) => field?.trim() === "")
   ) {
     throw new ApiError(400, "Please fill all the fields");
   }
+
   // 2.2 if the user exists or not
-  const existedUser = User.findOne({
+
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
+  
   if (existedUser) {
     throw new ApiError(409, "This useer already exists");
   }
 
   // 3 This is getting the photos
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+
+  // const avatarLocalPath = req.files?.avatar && Array.isArray(req.files.avatar) && req.files.avatar.length > 0
+  // ? req.files.avatar[0].path
+  // : null;
+
+  let coverImageLocalPath;
+  if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0 ) {
+    coverImageLocalPath = req.files.coverImage[0].path
+  }
+
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar field is required");
@@ -46,7 +60,7 @@ const registerUser = asyncHandler(async (req, res) => {
     fullName,
     email,
     password,
-    avatar: avatar.url, // here we get a respose from cloudinary we just need only the url of it
+    avatar: avatar?.url , // here we get a respose from cloudinary we just need only the url of it
 
     // In the same manner if we are to get for the coverIamge then code may crash if user didn't give one
     // we've not made sure that having the cover image is mandatory where we made sure about having an avatar
@@ -59,7 +73,6 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while registering the user");
   }
-
   return res
     .status(201)
     .json(
