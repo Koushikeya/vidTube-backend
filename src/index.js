@@ -1,6 +1,11 @@
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
 import app from "./app.js";
+import { refreshAccessToken } from "./controllers/user.controllers.js";
+
+const a_test = refreshAccessToken()
+console.log(a_test);
+
 
 dotenv.config({ path: "./.env" });
 
